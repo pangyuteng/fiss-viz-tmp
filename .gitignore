@@ -1,3 +1,2 @@
-image.nii.gz
-mask.nii.gz
+*.nii.gz
 .ipynb_checkpoints/**
