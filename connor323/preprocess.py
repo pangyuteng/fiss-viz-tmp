@@ -5,7 +5,7 @@ import numpy as np
 import SimpleITK as sitk
 
 # ref https://gist.github.com/mrajchl/ccbd5ed12eb68e0c1afc5da116af614a
-def resample_img(itk_image, out_spacing=[2.0, 2.0, 2.0], is_label=False):
+def resample_img(itk_image, out_spacing=[1.0, 1.0, 1.0], is_label=False):
     
     # Resample images to out_spacing with SimpleITK
     original_spacing = itk_image.GetSpacing()
@@ -56,10 +56,14 @@ if __name__ == "__main__":
         x = int(size[2]/4)
         img = img[:,:,x:2*x]
 
-    spacing = (1.,1.,1.)
+    arr = sitk.GetArrayFromImage(img)
+    arr = ((arr+1024)/4).clip(0,254)
+
+    spacing = (4.,4.,4.)
     origin = (0.,0.,0.)
     direction = (1.,0.,0.,0.,1.,0.,0.,0.,1.)
 
+    img = sitk.GetImageFromArray(arr)
     img.SetSpacing(spacing)
     img.SetOrigin(origin)
     img.SetDirection(direction)
