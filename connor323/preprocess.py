@@ -61,17 +61,17 @@ if __name__ == "__main__":
         x = int(size[2]/4)
         img = img[:,:,x:2*x]
 
-    arr = sitk.GetArrayFromImage(img)
-    arr = ((arr+1024)/4).clip(0,254)
-    print(np.min(arr),np.max(arr))
+    #arr = sitk.GetArrayFromImage(img)
+    #arr = ((arr+1024)/4).clip(0,254)
+    #print(np.min(arr),np.max(arr))
 
     spacing = (1.,1.,1.)
     origin = (0.,0.,0.)
     direction = (1.,0.,0.,0.,1.,0.,0.,0.,1.)
     
-    #img = img[:,:,200:350]
+    img = img[:,:,200:350]
     
-    img = sitk.GetImageFromArray(arr)
+    #img = sitk.GetImageFromArray(arr)
     img.SetSpacing(spacing)
     img.SetOrigin(origin)
     img.SetDirection(direction)
