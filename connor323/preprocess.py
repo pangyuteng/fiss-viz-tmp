@@ -1,5 +1,6 @@
 # https://stackoverflow.com/questions/60024404/how-to-change-the-orientation-of-simpleitk-image-in-python
 
+import argparse
 import os,sys
 import numpy as np
 import SimpleITK as sitk
@@ -33,20 +34,24 @@ def resample_img(itk_image, out_spacing=[1.0, 1.0, 1.0], is_label=False):
 
 if __name__ == "__main__":
 
-    input_file = sys.argv[1]
-    output_file = sys.argv[2]
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('input_file', type=str,help='input file path hello')
+    parser.add_argument('output_file', type=str,help='out file path')    
+    args = parser.parse_args()
+    
     crop = False
     target_spacing = (1.,1.,1.)
 
     reader= sitk.ImageFileReader()
-    reader.SetFileName(input_file)
+    reader.SetFileName(args.input_file)
     img = reader.Execute()
     print('original:')
     print('GetSize',img.GetSize())
     print('GetSpacing',img.GetSpacing())
     print('GetOrigin',img.GetOrigin())
     print('GetDirection',img.GetDirection())
-    '''
+    
     # resamling image to isotropic    
     img = resample_img(img,out_spacing=target_spacing)
     
@@ -59,14 +64,14 @@ if __name__ == "__main__":
     arr = sitk.GetArrayFromImage(img)
     arr = ((arr+1024)/4).clip(0,254)
     print(np.min(arr),np.max(arr))
-    img = sitk.GetImageFromArray(arr)
-    '''
 
     spacing = (1.,1.,1.)
     origin = (0.,0.,0.)
     direction = (1.,0.,0.,0.,1.,0.,0.,0.,1.)
     
-    img = img[:,:,200:350]
+    #img = img[:,:,200:350]
+    
+    img = sitk.GetImageFromArray(arr)
     img.SetSpacing(spacing)
     img.SetOrigin(origin)
     img.SetDirection(direction)
@@ -78,7 +83,7 @@ if __name__ == "__main__":
     print('GetDirection',img.GetDirection())
 
     writer = sitk.ImageFileWriter()
-    writer.SetFileName(output_file)
+    writer.SetFileName(args.output_file)
     writer.Execute(img)
 
     print('done')
