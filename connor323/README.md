@@ -24,4 +24,5 @@ https://github.com/Connor323/Lung-Lobes-Segmentation-in-CT-Scans
 
 O.O
 http://www.lungworkshop.org/2009/proc2008/10-brown.pdf
+https://doi.org/10.1111/resp.12253
 ```
