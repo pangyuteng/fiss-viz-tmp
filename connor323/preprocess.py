@@ -69,7 +69,7 @@ if __name__ == "__main__":
     
 
     origin = (0.,0.,0.)
-    direction = (1.,0.,0.,0.,1.,0.,0.,0.,1.)
+    direction = (1.,0.,0.,0.,1.,0.,0.,0.,-1.)
     
     # disabled intensity rescaling
     # vector_region_growing.cxx is already scaling. 
