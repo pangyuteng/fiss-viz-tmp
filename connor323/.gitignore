@@ -7,3 +7,5 @@ region_growing
 vector_region_growing
 *.mhd
 *.raw
+images/*
+images.zip

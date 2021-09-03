@@ -278,10 +278,19 @@ int main( int argc, char * argv[] )
     
   typedef itk::ImageFileReader< InputImageType >  readerType;
 
+  /* conner's
+  /*
   float sigma = 0.5;
   float alpha = 90;
   float beta = 120;
   float gama = 100;
+  */
+
+  // lassen's
+  float sigma = 1.0;
+  float alpha = 50;
+  float beta = 35;
+  float gama = 25;
 
   // Read Image
   readerType::Pointer reader = readerType::New();
