@@ -1,3 +1,5 @@
+# ref https://gist.github.com/pangyuteng/e942648579ebfd3c6e07c50eb81f42ac
+
 FROM ubuntu:18.04
     
 ARG MYPATH=/usr/local
@@ -37,18 +39,6 @@ RUN wget --quiet --no-check-certificate https://zlib.net/zlib-1.2.11.tar.gz -O z
     tar xfz zlib.tar.gz
 WORKDIR /opt/sources/zlib-1.2.11
 RUN ./configure --prefix=$MYPATH && make -j"$(nproc)" && make install -j"$(nproc)"
-
-# build dcmtk
-#RUN  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --fix-missing --no-install-recommends \
-#        libtiff5-dev \
-#        libpng-dev \
-#        libjpeg-dev \
-#        libgif-dev \
-#        libxml2-dev \
-#        libssl-dev \
-#        zlib1g-dev \
-#        libwrap0-dev \
-#        libssl-dev
 
 WORKDIR /opt/sources
 RUN wget --quiet --no-check-certificate https://github.com/DCMTK/dcmtk/archive/DCMTK-3.6.4.tar.gz -O dcmtk.tar.gz && \
@@ -101,12 +91,15 @@ RUN mv builtin_converters.cpp libs/python/src/converter/builtin_converters.cpp
 RUN ./b2 install
 
 RUN /bin/bash -c "source /opt/conda/bin/activate py && conda install cython numpy -y && pip install scikit-build"
-RUN /bin/bash -c "source /opt/conda/bin/activate py && pip install SimpleITK"
+RUN /bin/bash -c "source /opt/conda/bin/activate py && pip install scipy scikit-image SimpleITK pydicom notebook"
 
-RUN apt-get update; apt-get install gdb -yq
+RUN apt-get update; apt-get install gdb unzip curl -yq
 
 RUN mkdir -p /opt/code
 WORKDIR /opt/code
 
 COPY * /opt/code/
+
+
+
 
