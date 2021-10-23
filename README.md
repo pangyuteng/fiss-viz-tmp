@@ -2,8 +2,8 @@
 
 + build and go into the container
 ```
-docker build -t test .
-docker run -it -p 8888:8888 -w /workdir -v $PWD:/workdir test bash
+docker build -t fiss .
+docker run -it -p 8888:8888 -w /workdir -v $PWD:/workdir fiss bash
 
 ```
 
