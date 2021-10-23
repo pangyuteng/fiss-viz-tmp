@@ -1,2 +1,4 @@
 *.nii.gz
 .ipynb_checkpoints/**
+img/*
+img.zip
