@@ -91,7 +91,7 @@ void Regiongrowing::region_growing(const ImageType::Pointer& image, PointType po
       if (OutputImage->GetPixel(out_index) == 0){
         ImageType::PixelType np = image->GetPixel( out_index );
         float diff = std::abs(np - p);
-        if (np > 0 && *vol_point < 20000){ 
+        if (np > 0 && *vol_point < 100){
           OutputImage->SetPixel( out_index, label);
           *vol_point = *vol_point + 1;
           this->region_growing(image, neighbors[i], label, thresh_val, vol_point);

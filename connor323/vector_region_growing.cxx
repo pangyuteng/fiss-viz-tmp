@@ -132,7 +132,7 @@ public:
         outVoxelType mean = 198.275350;
         outVoxelType std = 42.571917;
 
-        outVoxelType vessel_thesh = mean - 3 * std;
+        outVoxelType vessel_thesh = mean - 2 * std;
 
         for(HIter.GoToBegin(),OutputIter.GoToBegin(),InputImageIter.GoToBegin();
             !HIter.IsAtEnd()&&!OutputIter.IsAtEnd()&&!InputImageIter.IsAtEnd();
@@ -173,7 +173,7 @@ public:
             VoxelType pixel_val = (InputImageIter.Get() + 1024) / 4;
 
             // Thresholding the result fissure structure measurement
-            fissure_cond = Sfissure > 0.8 && pixel_val < vessel_thesh ? true : false;
+            fissure_cond = Sfissure > 0.1 && pixel_val < vessel_thesh ? true : false;
 
             // Save the corresponding eigenvector for the maximum eigenvalue
             for (int i = 0; i < 3; i++){
