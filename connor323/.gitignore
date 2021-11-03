@@ -5,6 +5,7 @@ Makefile
 cmake_install.cmake
 region_growing
 vector_region_growing
+enhance_fiss
 *.mhd
 *.raw
 images/*
