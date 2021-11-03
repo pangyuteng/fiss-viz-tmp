@@ -214,7 +214,6 @@ public:
                 int volume = 1;
                 int *vol_point = &volume;
                 this->region_growing(point, label, vol_point);
-                label = label + 1;
               }
             }
           }

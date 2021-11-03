@@ -17,3 +17,6 @@ target_link_libraries(vector_region_growing ${ITK_LIBRARIES})
 
 add_executable(region_growing region_growing.cxx)
 target_link_libraries(region_growing ${ITK_LIBRARIES})
+
+add_executable(enhance_fiss.cxx)
+target_link_libraries(enhance_fiss ${ITK_LIBRARIES})
