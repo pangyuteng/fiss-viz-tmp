@@ -59,6 +59,8 @@ public:
     MatRegionType region;
     MatSpacingType spacing;
     MatPointType origin;
+    
+    MatRegionType fiss_region;
 
     CastFilterType::Pointer CastFilter;
     HFilterType::Pointer HFilter;
@@ -68,6 +70,7 @@ public:
     VecEigHImagePointerType VecEigHImagePointer;
 
     OutputImageType::Pointer OutputImage;
+    OutputImageType::Pointer FissImage;
 
     ImportFilterType::Pointer importFilter;
 
@@ -117,6 +120,10 @@ public:
         OutputImage->SetRegions( region );
         OutputImage->Allocate(true); // initialize buffer to zero
 
+        FissImage = OutputImageType::New();
+        FissImage->SetRegions( region );
+        FissImage->Allocate(true); // initialize buffer to zero
+
         HIterType HIter(HFilter->GetOutput(),region);
 
         OutputIterType OutputIter(VecEigHImagePointer,region);
@@ -127,6 +134,8 @@ public:
 
         InputImageIterType InputImageIter(image, region);
 
+        OutputImageIterType FissImageIter(FissImage, region);
+
         // this is the mean and std value for vessel which is compute according to
         // histogram analysis in previous result.
         outVoxelType mean = 198.275350;
@@ -134,9 +143,9 @@ public:
 
         outVoxelType vessel_thesh = mean - 2 * std;
 
-        for(HIter.GoToBegin(),OutputIter.GoToBegin(),InputImageIter.GoToBegin();
-            !HIter.IsAtEnd()&&!OutputIter.IsAtEnd()&&!InputImageIter.IsAtEnd();
-            ++HIter,++OutputIter,++InputImageIter){
+        for(HIter.GoToBegin(),OutputIter.GoToBegin(),InputImageIter.GoToBegin(),FissImageIter.GoToBegin();
+            !HIter.IsAtEnd()&&!OutputIter.IsAtEnd()&&!InputImageIter.IsAtEnd()&&!FissImageIter.IsAtEnd();
+            ++HIter,++OutputIter,++InputImageIter,++FissImageIter){
             Tensor=HIter.Get();
             tmpMat[0][0]=Tensor[0];
             tmpMat[0][1]=Tensor[1];
@@ -179,6 +188,7 @@ public:
             for (int i = 0; i < 3; i++){
               if (EigVal[i] == sortedEigVal[2] && fissure_cond){
                 OutputIter.Set(EigMat[i]);
+                FissImageIter.Set(Sfissure);
                 break;
               }
             }
@@ -214,6 +224,7 @@ public:
                 int volume = 1;
                 int *vol_point = &volume;
                 this->region_growing(point, label, vol_point);
+                label = label + 1;
               }
             }
           }
@@ -269,9 +280,9 @@ int main( int argc, char * argv[] )
 {
   time_t tStart = clock();
 
-  if( argc < 2 ) {
+  if( argc < 3 ) {
       std::cerr << "Usage: " << std::endl;
-      std::cerr << argv[0] << "  inputImageFile  outputImageFile" << std::endl;
+      std::cerr << argv[0] << "  inputImageFile  outputImageFile outputFissFile" << std::endl;
       return EXIT_FAILURE;
   }
     
@@ -305,8 +316,14 @@ int main( int argc, char * argv[] )
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[2] );
   writer->SetInput( eigenvalues.OutputImage );
-
   writer->Update();
+
+  typedef itk::ImageFileWriter < OutputImageType > WriterType;
+  WriterType::Pointer writer1 = WriterType::New();
+  writer1->SetFileName( argv[3] );
+  writer1->SetInput( eigenvalues.FissImage );
+  writer1->Update();
+  
   printf("Time taken: %.2fs\n", (float)(clock() - tStart)/CLOCKS_PER_SEC);
 
   return EXIT_SUCCESS;

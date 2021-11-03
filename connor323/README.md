@@ -20,6 +20,11 @@ python preprocess.py images testinput.mhd
 
 
 ```
+./enhance_fiss image.nii.gz fiss_enhanced.nii.gz
+```
+
+
+```
 ref.
 https://gist.github.com/pangyuteng/e942648579ebfd3c6e07c50eb81f42ac
 https://github.com/Connor323/Lung-Lobes-Segmentation-in-CT-Scans
