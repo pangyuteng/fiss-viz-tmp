@@ -21,6 +21,11 @@ if __name__ == "__main__":
     reader= sitk.ImageFileReader()
     reader.SetFileName(args.input_file)
 
+
+    origin = (0.,0.,0.)
+    direction = (1.,0.,0.,0.,1.,0.,0.,0.,-1.)
+    spacing = (1.,1.,1.)
+
     img = reader.Execute()
     print('original:')
     print('GetSize',img.GetSize())
@@ -30,6 +35,11 @@ if __name__ == "__main__":
     
     reader= sitk.ImageFileReader()
     reader.SetFileName(args.mask_file)
+
+    writer = sitk.ImageFileWriter()
+    writer.SetFileName(args.input_file)
+    writer.Execute(img)
+
     mask_obj = reader.Execute()
     mask = sitk.GetArrayFromImage(mask_obj)
 
@@ -38,25 +48,26 @@ if __name__ == "__main__":
 
     mylist = [
         ('lof',1,2),
-        ('rof',[3,4],5),
-        ('rhf',3,4),
+        ('rof',[3,5],4),
+        ('rhf',3,5),
     ]
     apprx_fiss=np.zeros(arr.shape)
     print(np.unique(mask))
     for name,ind0,ind1 in mylist:
         if isinstance(ind0,list):
-            mask0 = np.logical_or(mask==ind0[0],mask==ind0[0])
+            mask0 = np.logical_or(mask==ind0[0],mask==ind0[1])
         else:
             mask0 = mask == ind0
         mask1 = mask == ind1
 
-        iteration = 5
+        iteration = 10
         mask0 = ndimage.binary_dilation(mask0,iterations=iteration)
         mask1 = ndimage.binary_dilation(mask1,iterations=iteration)
         overlay = np.logical_and(mask0,mask1)
         print(np.sum(overlay))
         apprx_fiss[overlay==1]=1
         print(name,ind0,ind1)
+        print('--') 
     
     apprx_fiss[mask==0]=0
     print(np.sum(apprx_fiss))
@@ -67,9 +78,6 @@ if __name__ == "__main__":
     print(np.sum(arr))
     img = sitk.GetImageFromArray(arr)
 
-    origin = (0.,0.,0.)
-    direction = (1.,0.,0.,0.,1.,0.,0.,0.,-1.)
-    spacing = (1.,1.,1.)
 
     img.SetSpacing(spacing)
     img.SetOrigin(origin)
