@@ -42,20 +42,24 @@ if __name__ == "__main__":
         ('rhf',3,4),
     ]
     apprx_fiss=np.zeros(arr.shape)
+    print(np.unique(mask))
     for name,ind0,ind1 in mylist:
         if isinstance(ind0,list):
-            mask0 = np.logical_or(arr==ind0[0],arr==ind0[0])
+            mask0 = np.logical_or(mask==ind0[0],mask==ind0[0])
         else:
-            mask0 = arr==ind0
-        mask1 = arr == ind1
+            mask0 = mask == ind0
+        mask1 = mask == ind1
 
         iteration = 5
         mask0 = ndimage.binary_dilation(mask0,iterations=iteration)
         mask1 = ndimage.binary_dilation(mask1,iterations=iteration)
         overlay = np.logical_and(mask0,mask1)
+        print(np.sum(overlay))
         apprx_fiss[overlay==1]=1
         print(name,ind0,ind1)
+    
     apprx_fiss[mask==0]=0
+    print(np.sum(apprx_fiss))
 
     print(np.sum(arr))
     arr = arr.astype(np.uint8)
