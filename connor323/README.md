@@ -20,7 +20,7 @@ python preprocess.py images testinput.mhd
 
 
 ```
-./enhance_fiss image.nii.gz fiss_enhanced.nii.gz
+./enhance_fiss image.nii.gz out_region_grow.nii.gz out_fiss.nii.gz
 ```
 
 
