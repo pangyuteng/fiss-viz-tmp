@@ -59,8 +59,6 @@ public:
     MatRegionType region;
     MatSpacingType spacing;
     MatPointType origin;
-    
-    MatRegionType fiss_region;
 
     CastFilterType::Pointer CastFilter;
     HFilterType::Pointer HFilter;
@@ -90,6 +88,11 @@ public:
         for(int i=0;i<3;i++)
             for(int j=0;j<3;j++)
                 EigMat[i][j]=0;
+
+        image->SetOrigin((0.0,0.0,0.0));
+        InputImageType::DirectionType direction;
+        direction.SetIdentity();
+        image->SetDirection(direction);
 
         region=image->GetLargestPossibleRegion();
         spacing=image->GetSpacing();
@@ -198,7 +201,7 @@ public:
         printf("Processing computing eigenvalues and eigenvectors\n");
         VecEigHImagePointer->Update();
         printf("Finish computing eigenvalues and eigenvectors\n");
-
+        std::cout << "Region growing..." << std::endl;
         // Compute the vector based region growing with given eigenvector.
         const OutputImageType::RegionType region = VecEigHImagePointer->GetBufferedRegion();
         const OutputImageType::SizeType size = region.GetSize();
@@ -318,7 +321,7 @@ int main( int argc, char * argv[] )
   writer->SetInput( eigenvalues.OutputImage );
   writer->Update();
 
-  typedef itk::ImageFileWriter < OutputImageType > WriterType;
+  std::cout << "   Saving Image again..." << std::endl;
   WriterType::Pointer writer1 = WriterType::New();
   writer1->SetFileName( argv[3] );
   writer1->SetInput( eigenvalues.FissImage );
