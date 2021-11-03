@@ -9,7 +9,6 @@ from scipy import ndimage
 from skimage import measure
 
 
-
 if __name__ == "__main__":
 
 
@@ -36,8 +35,31 @@ if __name__ == "__main__":
 
     arr = sitk.GetArrayFromImage(img).astype(float) > 0.8
     arr[mask==0]=0
+
+    mylist = [
+        ('lof',1,2),
+        ('rof',[3,4],5),
+        ('rhf',3,4),
+    ]
+    apprx_fiss=np.zeros(arr.shape)
+    for name,ind0,ind1 in mylist:
+        if isinstance(ind0,list):
+            mask0 = np.logical_or(arr==ind0[0],arr==ind0[0])
+        else:
+            mask0 = arr==ind0
+        mask1 = arr == ind1
+
+        iteration = 5
+        mask0 = ndimage.binary_dilation(mask0,iterations=iteration)
+        mask1 = ndimage.binary_dilation(mask1,iterations=iteration)
+        overlay = np.logical_and(mask0,mask1)
+        apprx_fiss[overlay==1]=1
+        print(name,ind0,ind1)
+    apprx_fiss[mask==0]=0
+
     print(np.sum(arr))
     arr = arr.astype(np.uint8)
+    arr[apprx_fiss==0]=0
     print(np.sum(arr))
     img = sitk.GetImageFromArray(arr)
 
