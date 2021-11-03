@@ -214,7 +214,8 @@ public:
                 int volume = 1;
                 int *vol_point = &volume;
                 this->region_growing(point, label, vol_point);
-                label = label + 1;
+                //label = label + 1;
+                //PTENG: not sure  what the purpose is for the +1, uncomment for now.
               }
             }
           }
@@ -254,7 +255,7 @@ void EigValHessian::region_growing(PointType point, float label, int *vol_point)
         VecEigHImagePointer->TransformPhysicalPointToIndex( neighbors[i], vec_index );
         VecEigHImageType::PixelType np = VecEigHImagePointer->GetPixel( vec_index );
         float product = np[0] * p[0] + np[1] * p[1] + np[2] * p[2];
-        if (product > 0.9){
+        if (product > 0.98){
           *vol_point = *vol_point + 1;
           OutputImage->SetPixel( out_index, label);
           this->region_growing(neighbors[i], label, vol_point);
