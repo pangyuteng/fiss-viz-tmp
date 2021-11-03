@@ -165,7 +165,7 @@ public:
             }
             HessianVoxelType Fstructure, Fsheet, Sfissure;
             Fstructure = theta * exp(-1*(pow((std::abs(sortedEigVal[2])-alpha)/beta,6)));
-            Fsheet = exp(-1*(pow(sortedEigVal[1]/gama,6)));
+            Fsheet = exp(-1*(pow(std::abs(sortedEigVal[1])/gama,6)));
 
             Sfissure = Fstructure * Fsheet;
 
