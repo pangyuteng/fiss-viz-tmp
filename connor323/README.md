@@ -21,6 +21,8 @@ python preprocess.py images testinput.mhd
 
 ```
 ./enhance_fiss image.nii.gz out_region_grow.nii.gz out_fiss.nii.gz
+
+python isolate.py out_fiss.nii.gz iso_mask.nii.gz out_fissP.nii.gz
 ```
 
 
