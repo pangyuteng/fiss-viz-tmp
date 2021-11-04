@@ -16,7 +16,7 @@ python preprocess.py image.nii.gz imageP.nii.gz
 ```
 ```
 ./enhance_fiss image.nii.gz out_region_grow.nii.gz out_fiss.nii.gz
-python isolate.py out_fiss.nii.gz out_region_grow.nii.gz iso_mask.nii.gz out_fiss_refined.nii.gz
+python isolate.py out_fiss.nii.gz iso_mask.nii.gz out_region_grow.nii.gz out_fiss_refined.nii.gz
 ```
 ```
 ref.

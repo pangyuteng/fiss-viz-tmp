@@ -49,7 +49,7 @@ if __name__ == "__main__":
     rg_obj = reader.Execute()
     rg = sitk.GetArrayFromImage(rg_obj)
     rg[mask==0]=0
-    '''
+    
     blobs_labels = measure.label(rg>0, background=0)
     properties = measure.regionprops(blobs_labels)
     properties = sorted(properties,key=lambda x: x.area,reverse=True)
@@ -58,11 +58,10 @@ if __name__ == "__main__":
 
     rg =  np.zeros(rg.shape)
     for x in properties:
-        print(x.area)
         rg[blobs_labels == x.label]=1
     print(np.unique(rg))
     print('---------')
-    '''
+    
     arr = sitk.GetArrayFromImage(img).astype(float) > 0.8
     arr[mask==0]=0
 
@@ -96,6 +95,9 @@ if __name__ == "__main__":
     arr = arr.astype(np.uint8)
     arr[apprx_fiss==0]=0
     
+    #???? further weed out small particles
+    arr[rg==0]=0
+
     print(np.sum(arr))
     img = sitk.GetImageFromArray(arr)
 
