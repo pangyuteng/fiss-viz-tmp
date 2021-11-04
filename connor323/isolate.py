@@ -15,6 +15,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('input_file', type=str,help='input file path hello')
     parser.add_argument('mask_file',type=str)
+    parser.add_argument('rg_file',type=str)
     parser.add_argument('output_file', type=str,help='out file path')    
     args = parser.parse_args()
     
@@ -43,6 +44,25 @@ if __name__ == "__main__":
     mask_obj = reader.Execute()
     mask = sitk.GetArrayFromImage(mask_obj)
 
+    reader= sitk.ImageFileReader()
+    reader.SetFileName(args.rg_file)
+    rg_obj = reader.Execute()
+    rg = sitk.GetArrayFromImage(rg_obj)
+    rg[mask==0]=0
+    '''
+    blobs_labels = measure.label(rg>0, background=0)
+    properties = measure.regionprops(blobs_labels)
+    properties = sorted(properties,key=lambda x: x.area,reverse=True)
+    print(len(properties))
+    properties = properties[:100]
+
+    rg =  np.zeros(rg.shape)
+    for x in properties:
+        print(x.area)
+        rg[blobs_labels == x.label]=1
+    print(np.unique(rg))
+    print('---------')
+    '''
     arr = sitk.GetArrayFromImage(img).astype(float) > 0.8
     arr[mask==0]=0
 
@@ -60,7 +80,7 @@ if __name__ == "__main__":
             mask0 = mask == ind0
         mask1 = mask == ind1
 
-        iteration = 10
+        iteration = 5
         mask0 = ndimage.binary_dilation(mask0,iterations=iteration)
         mask1 = ndimage.binary_dilation(mask1,iterations=iteration)
         overlay = np.logical_and(mask0,mask1)
@@ -75,6 +95,7 @@ if __name__ == "__main__":
     print(np.sum(arr))
     arr = arr.astype(np.uint8)
     arr[apprx_fiss==0]=0
+    
     print(np.sum(arr))
     img = sitk.GetImageFromArray(arr)
 
